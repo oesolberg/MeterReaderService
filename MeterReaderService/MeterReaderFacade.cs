@@ -19,6 +19,7 @@ namespace MeterReaderService
 
 		public MeterReaderFacade()
 		{
+			ServiceName = StaticVars.ServiceName;
 			InitializeComponent();
 			_fileSystemWatcher.Created += fileSystemWatcher_Changed;
 		}
