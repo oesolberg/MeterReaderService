@@ -8,6 +8,7 @@ namespace MeterReaderService.DataStorage
 {
 	public class Repository 
 	{
+		//Save image data to LiteDb
 		public void SaveData(ImageData processingResult)
 		{
 			var dbPath = GetDbFullPath();
@@ -22,10 +23,10 @@ namespace MeterReaderService.DataStorage
 					FileChangedDateTime = processingResult.FileChangedDateTime
 				};
 				imageDataCollection.Insert(imageData);
-
 			}
 		}
 
+		//Get latest imagedata (if any) from LiteDb
 		public ImageData GetLatestImageData()
 		{
 			ImageData returnData = null;
@@ -53,10 +54,11 @@ namespace MeterReaderService.DataStorage
 
 		}
 
+		//Get the full path for det database
 		private string GetDbFullPath()
 		{
 			var applicationPath = System.AppDomain.CurrentDomain.BaseDirectory;
-			return Path.Combine(applicationPath, "MeterReader.db");
+			return Path.Combine(applicationPath, StaticVars.DbFile);
 		}
 	}
 }

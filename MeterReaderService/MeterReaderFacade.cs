@@ -26,7 +26,7 @@ namespace MeterReaderService
 
 		protected override void OnStart(string[] args)
 		{
-			LogToEventLog("Starting MeterReaderService", EventLogEntryType.Information);
+			MeterReaderEventLog.SaveToEventLog("Starting MeterReaderService", EventLogEntryType.Information);
 			_filefilter = ConfigurationManager.AppSettings["filter"];
 			fileSystemWatcher.Filter = _filefilter;
 			_folderToWatch = ConfigurationManager.AppSettings["folder"];
@@ -40,28 +40,25 @@ namespace MeterReaderService
 			}
 			_server = new ServiceWebServer();
 			_server.CreateServer();
-
 		}
 
 		protected override void OnStop()
 		{
 			_server.StopServer();
-			LogToEventLog("MeterReaderService stopped", EventLogEntryType.Information);
+			MeterReaderEventLog.SaveToEventLog("MeterReaderService stopped", EventLogEntryType.Information);
 		}
 
 		private void fileSystemWatcher_Changed(object sender, System.IO.FileSystemEventArgs e)
 		{
 			try
 			{
-
-
+				//Added 1-2 seconds sleep to avoid trying to take a file that is beeing written
 				Thread.Sleep(_sleepInterval);
 				if ((e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed) && FileExists(e.FullPath))
 				{
 					var logString = "MeterReaderService sensed a change and started processing file " + e.FullPath;
-					LogToConsoleIfPossible(logString);
-					LogToEventLog(logString, EventLogEntryType.Information);
-
+					MeterReaderEventLog.SaveToEventLog(logString,EventLogEntryType.Information);
+					
 					var stopWatch = new Stopwatch();
 					//Some file has changed.
 					stopWatch.Start();
@@ -71,62 +68,21 @@ namespace MeterReaderService
 					if (stopWatch != null)
 					{
 						stopWatch.Stop();
-						var stringToLog = "Added missing images in " + stopWatch.ElapsedMilliseconds.ToString("N1") + " ms.";
-						LogToConsoleIfPossible(stringToLog);
-						LogToEventLog(stringToLog, EventLogEntryType.Information);
-
+						var stringToLog = "Processed image in  " + stopWatch.ElapsedMilliseconds.ToString("N1") + " ms.";
+						MeterReaderEventLog.SaveToEventLog(stringToLog,EventLogEntryType.Information);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				LogToEventLog(ex);
+				MeterReaderEventLog.SaveToEventLog(ex);
 				throw;
 			}
 		}
-
-		private void LogToEventLog(Exception exception)
-		{
-			CreateEventLogIfMissing();
-			using (EventLog eventLog = new EventLog(StaticVars.EventLog))
-			{
-				eventLog.Source = StaticVars.EventSource;
-				eventLog.WriteEntry(exception.Message +
-									Environment.NewLine +
-									exception.Source +
-									Environment.NewLine +
-									exception.StackTrace, EventLogEntryType.Error);
-			}
-
-		}
-
-		private void LogToEventLog(string stringToLog, EventLogEntryType eventLogEntryType)
-		{
-			CreateEventLogIfMissing();
-			using (EventLog eventLog = new EventLog(StaticVars.EventLog))
-			{
-				eventLog.Source = StaticVars.EventSource;
-				eventLog.WriteEntry(stringToLog, eventLogEntryType);
-			}
-		}
-
-		private void CreateEventLogIfMissing()
-		{
-			if (!EventLog.SourceExists(StaticVars.EventLog))
-				EventLog.CreateEventSource(StaticVars.EventSource, StaticVars.EventLog);
-		}
-
+		
 		private bool FileExists(string fullPath)
 		{
 			return System.IO.File.Exists(fullPath);
-		}
-
-		private void LogToConsoleIfPossible(string stringToWrite)
-		{
-			if (Environment.UserInteractive)
-			{
-				Console.WriteLine(stringToWrite);
-			}
 		}
 
 		private void InitializeComponent()
@@ -141,7 +97,5 @@ namespace MeterReaderService
 			((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
 
 		}
-
-		
 	}
 }

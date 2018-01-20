@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\MeterReaderEventLog.cs" />
     <Compile Include="Common\ProcessingResultType.cs" />
     <Compile Include="Common\ImageData.cs" />
     <Compile Include="Common\StaticVars.cs" />
