@@ -14,23 +14,23 @@ namespace MeterReaderService
 		private int _sleepInterval;
 		private string _folderToWatch;
 		private string _filefilter;
-		private FileSystemWatcher _fileSystemWatcher;
+		private FileSystemWatcher fileSystemWatcher;
 		private ServiceWebServer _server;
 
 		public MeterReaderFacade()
 		{
 			ServiceName = StaticVars.ServiceName;
 			InitializeComponent();
-			_fileSystemWatcher.Created += fileSystemWatcher_Changed;
+			fileSystemWatcher.Created += fileSystemWatcher_Changed;
 		}
 
 		protected override void OnStart(string[] args)
 		{
-			LogToEventLog("Starting ElectricityMeterReaderService", EventLogEntryType.Information);
+			LogToEventLog("Starting MeterReaderService", EventLogEntryType.Information);
 			_filefilter = ConfigurationManager.AppSettings["filter"];
-			_fileSystemWatcher.Filter = _filefilter;
+			fileSystemWatcher.Filter = _filefilter;
 			_folderToWatch = ConfigurationManager.AppSettings["folder"];
-			_fileSystemWatcher.Path = _folderToWatch;
+			fileSystemWatcher.Path = _folderToWatch;
 			_sleepInterval = 10000;
 			var sleepIntervalFromConfig = ConfigurationManager.AppSettings["sleepinterval"];
 			int sleepIntervalFromConfigConvertedToInt;
@@ -131,14 +131,17 @@ namespace MeterReaderService
 
 		private void InitializeComponent()
 		{
-			_fileSystemWatcher = new System.IO.FileSystemWatcher();
-			((System.ComponentModel.ISupportInitialize)(_fileSystemWatcher)).BeginInit();
+			this.fileSystemWatcher = new System.IO.FileSystemWatcher();
+			((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
 			// 
-			// fileSystemWatcher1
+			// fileSystemWatcher
 			// 
-			_fileSystemWatcher.EnableRaisingEvents = true;
-			((System.ComponentModel.ISupportInitialize)(_fileSystemWatcher)).EndInit();
+			this.fileSystemWatcher.EnableRaisingEvents = true;
+			this.fileSystemWatcher.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Changed);
+			((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
 
 		}
+
+		
 	}
 }

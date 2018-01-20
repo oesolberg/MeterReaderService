@@ -56,7 +56,7 @@ namespace MeterReaderService.DataStorage
 		private string GetDbFullPath()
 		{
 			var applicationPath = System.AppDomain.CurrentDomain.BaseDirectory;
-			return Path.Combine(applicationPath, "Warmwater.db");
+			return Path.Combine(applicationPath, "MeterReader.db");
 		}
 	}
 }

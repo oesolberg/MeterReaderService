@@ -18,9 +18,21 @@ namespace MeterReaderService.WebServer
 				//	Rotation = lastResult.Rotation,
 				//	FileChangedDate = lastResult.FileChangedDateTime,
 				//	DeliveryDate = DateTime.Now
-				//};
-				var probabillity = (lastResult.Probabillity * 100).ToString("0.00");
-				return "Probabillity=" + probabillity + ";Rotation=" + lastResult.Rotation + ";FileChangedDate=" + lastResult.FileChangedDateTime.ToString("yyyy-MM-dd HH:mm:ss") + ";DeliveryDate=" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+				//};if(
+				decimal probabillity = 0;
+				var rotation = 0;
+				var fileChangedDateTime = DateTime.MinValue;
+				if (lastResult != null)
+				{
+					fileChangedDateTime = lastResult.FileChangedDateTime;
+					probabillity = (decimal)(lastResult.Probabillity * 100);
+					rotation = lastResult.Rotation;
+				}
+				
+				return "Probabillity=" + probabillity.ToString("0.00")
+						+ ";Rotation=" + rotation + ";FileChangedDate=" 
+						+ fileChangedDateTime.ToString("yyyy-MM-dd HH:mm:ss") 
+						+ ";DeliveryDate=" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
 
 			};

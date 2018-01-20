@@ -67,7 +67,7 @@ namespace MeterReaderService.ImageProcessing
 			//IImageData imageData = null;
 
 
-			var imageHandler = new WarmWaterImageHandler();
+			var imageHandler = new MeterReaderImageHandler();
 			return imageHandler.DoImageProcessing(fileToProcess);
 
 		}

@@ -82,7 +82,7 @@
     <Compile Include="DataStorage\Repository.cs" />
     <Compile Include="ImageProcessing\ProcessImage.cs" />
     <Compile Include="ImageProcessing\ImageResult.cs" />
-    <Compile Include="ImageProcessing\WarmWaterImageHandler.cs" />
+    <Compile Include="ImageProcessing\MeterReaderImageHandler.cs" />
     <Compile Include="MeterReaderFacade.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -101,6 +101,14 @@
     <EmbeddedResource Include="MeterReaderFacade.resx">
       <DependentUpon>MeterReaderFacade.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\KorrektNaalMedGraatt.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\MeterMalWithGray.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

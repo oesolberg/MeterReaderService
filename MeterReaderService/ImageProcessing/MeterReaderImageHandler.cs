@@ -11,7 +11,7 @@ using MeterReaderService.Common;
 
 namespace MeterReaderService.ImageProcessing
 {
-	public class WarmWaterImageHandler
+	public class MeterReaderImageHandler
 	{
 		//private readonly string _eventSource = "WarmWaterFacade";
 		//private readonly string _eventLog = "WarmWaterService";
